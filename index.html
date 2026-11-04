@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kids Player Family Library</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #5A3E8C; --soft: #9A86BF; --pink: #FF6F9C; --line: #F3D3DE; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; min-height: 100%; }
+  body { font-family: Poppins, sans-serif; color: var(--ink); background: linear-gradient(#FFF4FA, #F1E8FF) fixed; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 14px 16px 104px; }
+  .press { cursor: pointer; transition: transform .12s; user-select: none; } .press:active { transform: scale(.95); }
+  h1, h2, h3 { margin: 0; } p { margin: 0; }
+  .hello { display: flex; align-items: flex-end; gap: 10px; margin: 6px 0 14px; }
+  .hello svg.bun { width: 76px; height: 87px; flex: none; animation: hop 2.6s ease-in-out infinite; }
+  @keyframes hop { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  .bubble { background: #fff; border-radius: 22px 22px 22px 6px; padding: 10px 16px; box-shadow: 0 4px 0 var(--line); }
+  .bubble h1 { color: #E85BB4; font-size: 22px; line-height: 1.15; } .bubble p { margin-top: 2px; color: var(--soft); font-size: 13.5px; }
+  .sect { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 20px 2px 10px; }
+  .sect h2 { font-size: 18px; } .sect small { color: var(--soft); font-size: 12px; text-align: right; }
+  .card { background: #fff; border-radius: 22px; box-shadow: 0 4px 0 var(--line); overflow: hidden; }
+  .list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .row { display: flex; gap: 12px; padding: 10px; align-items: center; }
+  .row img, .row .ph { width: 78px; height: 78px; border-radius: 16px; object-fit: cover; flex: none; background: #FFE8F0; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+  .row b { display: block; font-size: 15px; line-height: 1.2; } .row small { display: block; color: var(--soft); font-size: 11.5px; margin-top: 2px; }
+  .row p { font-size: 12.5px; margin-top: 3px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .badge { display: inline-block; font-size: 10.5px; font-weight: 700; color: #fff; padding: 2px 9px; border-radius: 10px; margin-bottom: 3px; background: linear-gradient(135deg, #FF8FB1, #B48CFF); white-space: nowrap; }
+  .badge.up { background: linear-gradient(135deg, #7ED6A8, #3DBE8B); } .badge.xmas { background: linear-gradient(135deg, #FF8FA3, #E8506E); } .badge.app { background: linear-gradient(135deg, #A9DCFF, #3E9BE0); }
+  .xbanner { padding: 14px 16px; display: flex; gap: 12px; align-items: center; background: linear-gradient(135deg, #FFF0F3, #EFFBF4); border: 2px dashed #F7C3CF; margin-bottom: 12px; }
+  .xbanner .ic { font-size: 40px; } .xbanner b { color: #E8506E; font-size: 16px; } .xbanner p { margin-top: 2px; font-size: 13px; }
+  /* the three big buttons on Home */
+  .big3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; }
+  .bigb { border-radius: 26px; padding: 16px 6px 12px; text-align: center; font-weight: 700; font-size: 15px; }
+  .bigb .ic { font-size: 42px; display: block; line-height: 1.2; } .bigb small { display: block; font-weight: 500; font-size: 11px; opacity: .85; }
+  /* the doors */
+  .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(98px, 1fr)); gap: 12px; }
+  .tile { border-radius: 26px; aspect-ratio: 1 / 1.05; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-weight: 700; font-size: 15px; position: relative; }
+  .tile svg { width: 58%; height: 58%; } .tile .badge { position: absolute; top: 6px; right: 6px; }
+  .ctop { border-radius: 0 0 34px 34px; margin: -14px -16px 14px; padding: 14px 16px 18px; color: #fff; }
+  .back { width: 42px; height: 42px; border-radius: 50%; background: #fff; color: var(--pink); display: inline-flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 3px 0 rgba(0,0,0,.08); }
+  .ctop .hd { display: flex; align-items: center; gap: 12px; margin-top: 8px; } .ctop .hd svg { width: 56px; height: 56px; } .ctop h2 { font-size: 26px; } .ctop p { opacity: .95; font-size: 13px; }
+  .groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .gcard { position: relative; } .gcard .cv { aspect-ratio: 1; width: 100%; object-fit: cover; display: block; }
+  .gcard .ph { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; } .gcard .ph svg { width: 55%; }
+  .gcard .txt { padding: 8px 12px 11px; } .gcard b { font-size: 14.5px; line-height: 1.2; display: block; } .gcard small { color: var(--soft); font-size: 12px; }
+  .gcard .badge { position: absolute; top: 8px; left: 8px; margin: 0; }
+  /* sheets from the bottom: a group's topics, a topic */
+  .shade { position: fixed; inset: 0; background: rgba(90, 62, 140, .35); z-index: 30; display: flex; align-items: flex-end; justify-content: center; animation: fade .2s; }
+  @keyframes fade { from { opacity: 0; } }
+  .sheet { background: #FFF9FB; width: 100%; max-width: 760px; max-height: 88vh; overflow-y: auto; border-radius: 28px 28px 0 0; padding: 16px 16px 30px; animation: up .25s ease-out; position: relative; }
+  @keyframes up { from { transform: translateY(40px); } }
+  .sheet .sh { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; } .sheet h3 { font-size: 20px; flex: 1; }
+  .x { width: 38px; height: 38px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; color: #E85B9A; box-shadow: 0 2px 0 var(--line); font-size: 17px; flex: none; }
+  .topic .pic { width: 100%; max-height: 240px; object-fit: cover; border-radius: 20px; display: block; background: #FFE8F0; }
+  .topic .where { color: var(--soft); font-size: 12.5px; margin: 10px 0 2px; } .topic h3 { font-size: 22px; margin-bottom: 6px; }
+  .kinds { display: inline-flex; gap: 6px; flex-wrap: wrap; margin: 4px 0 10px; } .kinds span { background: #F3EDFF; color: #7E62D6; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 12px; }
+  .topic .about { font-size: 14px; line-height: 1.5; margin-bottom: 14px; }
+  .topic .btn { display: flex; width: 100%; padding: 13px; font-size: 16px; }
+  .topic .note { font-size: 11.5px; color: var(--soft); text-align: center; margin-top: 8px; }
+  .btns { display: flex; gap: 8px; margin-top: 8px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: var(--pink); color: #fff; font-weight: 700; border-radius: 20px; padding: 10px 14px; font-size: 14.5px; box-shadow: 0 4px 0 #D9467A; text-decoration: none; flex: 1; font-family: inherit; border: 0; }
+  .btn.alt { background: #fff; color: var(--ink); box-shadow: 0 4px 0 var(--line); } .btn.green { background: #3DBE8B; box-shadow: 0 4px 0 #2E9A6F; } .btn.off { background: #E8DDF7; color: var(--soft); box-shadow: none; }
+  /* downloads: a cover with the explanation next to it */
+  .dl { display: flex; gap: 14px; padding: 12px; align-items: stretch; }
+  .dl img { align-self: flex-start; height: auto; width: 112px; aspect-ratio: 210 / 297; object-fit: cover; object-position: top; border-radius: 12px; border: 1px solid #F6E6EE; flex: none; background: #fff; }
+  .dl .txt { display: flex; flex-direction: column; flex: 1; } .dl b { font-size: 16px; line-height: 1.2; } .dl p { font-size: 13px; line-height: 1.45; margin: 4px 0 6px; } .dl small { color: var(--soft); font-size: 11.5px; }
+  .dl .btns { margin-top: auto; padding-top: 8px; }
+  /* the shop */
+  .shop2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+  .sitem { padding: 18px 14px; text-align: center; } .sitem .ic { font-size: 54px; display: block; } .sitem b { font-size: 17px; display: block; margin-top: 4px; } .sitem p { font-size: 12.5px; color: var(--soft); margin-top: 2px; }
+  .who { display: flex; gap: 8px; flex-wrap: wrap; } .who span { background: #fff; border-radius: 18px; padding: 6px 14px 6px 8px; box-shadow: 0 3px 0 var(--line); font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
+  .who span svg { width: 28px; height: 32px; } .who span.on { box-shadow: 0 0 0 3px #3DBE8B, 0 3px 0 #2E9A6F; }
+  .refills { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .ref { padding: 12px; text-align: center; position: relative; } .ref .ic { font-size: 38px; display: block; } .ref b { display: block; font-size: 14.5px; } .ref small { color: var(--soft); font-size: 11.5px; display: block; }
+  .ref .n { display: inline-block; margin-top: 6px; background: #FFF0D6; color: #C98A00; font-weight: 700; font-size: 12px; padding: 2px 10px; border-radius: 10px; }
+  .ref .tick { position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 50%; border: 3px solid #E8DDF7; color: #fff; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+  .ref.on { box-shadow: 0 0 0 3px #3DBE8B, 0 4px 0 #2E9A6F; } .ref.on .tick { background: #3DBE8B; border-color: #3DBE8B; }
+  .total { text-align: center; margin: 14px 0 4px; font-size: 15px; } .total b { color: #E85B7A; font-size: 18px; }
+  .books { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+  .bk img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; } .bk .txt { padding: 10px 12px 12px; } .bk b { font-size: 16px; display: block; } .bk p { font-size: 13px; line-height: 1.45; margin: 4px 0 4px; }
+  textarea { width: 100%; min-height: 70px; border-radius: 18px; border: 2px solid var(--line); padding: 12px; font-family: inherit; font-size: 14px; color: var(--ink); resize: vertical; }
+  .done { text-align: center; padding: 26px 16px; } .done .ic { font-size: 64px; animation: hop 1.6s ease-in-out infinite; display: inline-block; } .done h2 { color: #E85B7A; margin-top: 6px; }
+  .mine { padding: 10px 14px; display: flex; gap: 10px; align-items: center; } .mine .ic { font-size: 26px; } .mine b { font-size: 14px; display: block; } .mine small { color: var(--soft); font-size: 11.5px; }
+  .st { margin-left: auto; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 10px; background: #FFF0D6; color: #C98A00; white-space: nowrap; } .st.ok { background: #E1F7EC; color: #2E9A6F; }
+  .empty { text-align: center; color: var(--soft); padding: 20px; font-size: 14px; }
+  .pretend { text-align: center; font-size: 12px; color: var(--soft); margin: -6px 0 12px; }
+  /* the bar at the bottom */
+  .nav { position: fixed; left: 0; right: 0; bottom: 0; background: #fff; box-shadow: 0 -4px 18px rgba(232, 91, 180, .12); border-radius: 24px 24px 0 0; display: flex; justify-content: center; z-index: 20; padding: 6px 6px calc(8px + env(safe-area-inset-bottom)); }
+  .nav .in { display: flex; width: 100%; max-width: 560px; }
+  .nb { flex: 1; text-align: center; padding: 6px 2px; border-radius: 16px; color: var(--soft); font-size: 11.5px; font-weight: 600; }
+  .nb .ic { font-size: 24px; display: block; line-height: 1.2; } .nb.on { color: var(--pink); background: #FFF0F6; }
+  /* the family code */
+  .gate { position: fixed; inset: 0; z-index: 50; background: linear-gradient(#FFF4FA, #F1E8FF); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+  .gate svg.bun { width: 110px; height: 126px; animation: hop 2.6s ease-in-out infinite; }
+  .gate h1 { color: #E85BB4; font-size: 24px; margin-top: 6px; } .gate p { color: var(--soft); margin: 4px 0 14px; font-size: 14px; }
+  .dots { display: flex; gap: 12px; margin-bottom: 16px; } .dots i { width: 18px; height: 18px; border-radius: 50%; border: 3px solid #CDBBFF; } .dots i.on { background: var(--pink); border-color: var(--pink); }
+  .pad { display: grid; grid-template-columns: repeat(3, 70px); gap: 12px; } .key { height: 62px; border-radius: 22px; background: #fff; box-shadow: 0 4px 0 var(--line); font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center; color: var(--ink); }
+  .shake { animation: shake .4s; } @keyframes shake { 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+  .demo { position: fixed; top: 8px; right: 8px; z-index: 60; background: #fff; color: var(--soft); font-size: 11px; padding: 3px 9px; border-radius: 10px; box-shadow: 0 2px 0 var(--line); }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div class="nav"><div class="in" id="nav"></div></div>
+<script>window.KP_API = 'https://script.google.com/macros/s/AKfycbwWU3n_oonTqmx2OE9jKVYWrgXee-djr7YcCrynMQYxVFPEpYcsYskPHu293q3LdF6w/exec';</script>
+<script>// Cute characters (original artwork)
+window.ART = {"Stories": "<rect x=\"18\" y=\"20\" width=\"64\" height=\"62\" rx=\"10\" fill=\"#fff\"/><rect x=\"18\" y=\"20\" width=\"12\" height=\"62\" rx=\"6\" fill=\"#FFD6E2\"/><path d=\"M60 20v22l7-5 7 5V20\" fill=\"#FFD27A\"/><g transform=\"translate(54 56) scale(1)\"><ellipse cx=\"-9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/><ellipse cx=\"9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/>\n<circle cx=\"-8\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/><circle cx=\"10\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/>\n<ellipse cx=\"-15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/><ellipse cx=\"15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/>\n<path d=\"M-4 5 q4 4 8 0\" stroke=\"#3A2A55\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\"/></g>", "Music": "<path d=\"M62 14v46\" stroke=\"#fff\" stroke-width=\"9\" stroke-linecap=\"round\"/><path d=\"M62 14q18 4 18 20\" stroke=\"#fff\" stroke-width=\"8\" fill=\"none\" stroke-linecap=\"round\"/><circle cx=\"46\" cy=\"64\" r=\"22\" fill=\"#fff\"/><g transform=\"translate(46 64) scale(0.9)\"><ellipse cx=\"-9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/><ellipse cx=\"9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/>\n<circle cx=\"-8\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/><circle cx=\"10\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/>\n<ellipse cx=\"-15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/><ellipse cx=\"15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/>\n<path d=\"M-4 5 q4 4 8 0\" stroke=\"#3A2A55\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\"/></g>", "Games": "<rect x=\"12\" y=\"32\" width=\"76\" height=\"44\" rx=\"22\" fill=\"#fff\"/><path d=\"M26 48v12M20 54h12\" stroke=\"#3DBE8B\" stroke-width=\"4\" stroke-linecap=\"round\"/><circle cx=\"72\" cy=\"48\" r=\"4\" fill=\"#FF6F9C\"/><circle cx=\"80\" cy=\"56\" r=\"4\" fill=\"#7AA8FF\"/><g transform=\"translate(50 52) scale(0.75)\"><ellipse cx=\"-9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/><ellipse cx=\"9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/>\n<circle cx=\"-8\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/><circle cx=\"10\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/>\n<ellipse cx=\"-15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/><ellipse cx=\"15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/>\n<path d=\"M-4 5 q4 4 8 0\" stroke=\"#3A2A55\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\"/></g>", "Create": "<g transform=\"rotate(-30 50 50)\"><rect x=\"34\" y=\"8\" width=\"32\" height=\"64\" rx=\"8\" fill=\"#fff\"/><path d=\"M34 72h32l-16 22z\" fill=\"#FFE0B0\"/><path d=\"M45 87l5 7 5-7z\" fill=\"#FF6F9C\"/><rect x=\"34\" y=\"8\" width=\"32\" height=\"12\" rx=\"6\" fill=\"#FFB3C7\"/></g><g transform=\"translate(46 48) scale(0.8)\"><ellipse cx=\"-9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/><ellipse cx=\"9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/>\n<circle cx=\"-8\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/><circle cx=\"10\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/>\n<ellipse cx=\"-15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/><ellipse cx=\"15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/>\n<path d=\"M-4 5 q4 4 8 0\" stroke=\"#3A2A55\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\"/></g>", "Discover": "<path d=\"M66 66l18 18\" stroke=\"#fff\" stroke-width=\"11\" stroke-linecap=\"round\"/><circle cx=\"44\" cy=\"44\" r=\"30\" fill=\"#fff\"/><circle cx=\"44\" cy=\"44\" r=\"22\" fill=\"#E3F4FF\"/><g transform=\"translate(44 46) scale(0.85)\"><ellipse cx=\"-9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/><ellipse cx=\"9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/>\n<circle cx=\"-8\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/><circle cx=\"10\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/>\n<ellipse cx=\"-15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/><ellipse cx=\"15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/>\n<path d=\"M-4 5 q4 4 8 0\" stroke=\"#3A2A55\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\"/></g><path d=\"M80 14l3 7 7 3-7 3-3 7-3-7-7-3 7-3z\" fill=\"#FFD27A\"/>", "World": "<circle cx=\"50\" cy=\"52\" r=\"34\" fill=\"#fff\"/><path d=\"M28 36q10 -6 16 4t-4 16q-8 2-12-6M62 64q8-8 14 0q-2 10-12 10\" fill=\"#BFF0D8\"/><g transform=\"translate(50 56) scale(0.85)\"><ellipse cx=\"-9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/><ellipse cx=\"9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/>\n<circle cx=\"-8\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/><circle cx=\"10\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/>\n<ellipse cx=\"-15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/><ellipse cx=\"15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/>\n<path d=\"M-4 5 q4 4 8 0\" stroke=\"#3A2A55\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\"/></g><path d=\"M50 12v6\" stroke=\"#fff\" stroke-width=\"4\" stroke-linecap=\"round\"/>", "Reading": "<path d=\"M50 30q-18-10-38-6v52q20-4 38 6q18-10 38-6V24q-20-4-38 6z\" fill=\"#fff\"/><path d=\"M50 30v52\" stroke=\"#E5DBFF\" stroke-width=\"3\"/><g transform=\"translate(50 56) scale(0.8)\"><ellipse cx=\"-9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/><ellipse cx=\"9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/>\n<circle cx=\"-8\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/><circle cx=\"10\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/>\n<ellipse cx=\"-15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/><ellipse cx=\"15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/>\n<path d=\"M-4 5 q4 4 8 0\" stroke=\"#3A2A55\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\"/></g><path d=\"M80 10l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z\" fill=\"#FFD27A\"/>", "Sleep": "<path d=\"M66 18A34 34 0 1 0 84 66 28 28 0 0 1 66 18z\" fill=\"#FFF3B8\"/><g transform=\"translate(44 58) scale(0.85)\"><ellipse cx=\"-9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/><ellipse cx=\"9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/>\n<circle cx=\"-8\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/><circle cx=\"10\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/>\n<ellipse cx=\"-15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/><ellipse cx=\"15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/>\n<path d=\"M-4 5 q4 4 8 0\" stroke=\"#3A2A55\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\"/></g><text x=\"70\" y=\"34\" font-family=\"Poppins\" font-weight=\"700\" font-size=\"14\" fill=\"#fff\">z</text><text x=\"80\" y=\"22\" font-family=\"Poppins\" font-weight=\"700\" font-size=\"10\" fill=\"#fff\">z</text>", "Mama": "<path d=\"M50 86L18 54C6 42 12 18 32 18c8 0 14 5 18 11 4-6 10-11 18-11 20 0 26 24 14 36z\" fill=\"#fff\"/><g transform=\"translate(50 50) scale(0.85)\"><ellipse cx=\"-9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/><ellipse cx=\"9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/>\n<circle cx=\"-8\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/><circle cx=\"10\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/>\n<ellipse cx=\"-15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/><ellipse cx=\"15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/>\n<path d=\"M-4 5 q4 4 8 0\" stroke=\"#3A2A55\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\"/></g>", "crown": "<path d=\"M18 74h64v10H18zM20 34l16 16 14-24 14 24 16-16-6 38H26z\" fill=\"#FFD27A\"/><circle cx=\"20\" cy=\"32\" r=\"5\" fill=\"#FF6F9C\"/><circle cx=\"50\" cy=\"24\" r=\"5\" fill=\"#7AA8FF\"/><circle cx=\"80\" cy=\"32\" r=\"5\" fill=\"#3DBE8B\"/><g transform=\"translate(50 58) scale(0.7)\"><ellipse cx=\"-9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/><ellipse cx=\"9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/>\n<circle cx=\"-8\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/><circle cx=\"10\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/>\n<ellipse cx=\"-15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/><ellipse cx=\"15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/>\n<path d=\"M-4 5 q4 4 8 0\" stroke=\"#3A2A55\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\"/></g>", "star": "<path d=\"M50 10l12 26 28 3-21 19 6 28-25-14-25 14 6-28-21-19 28-3z\" fill=\"#FFD27A\"/><g transform=\"translate(50 52) scale(0.7)\"><ellipse cx=\"-9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/><ellipse cx=\"9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/>\n<circle cx=\"-8\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/><circle cx=\"10\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/>\n<ellipse cx=\"-15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/><ellipse cx=\"15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/>\n<path d=\"M-4 5 q4 4 8 0\" stroke=\"#3A2A55\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\"/></g>", "door": "<rect x=\"22\" y=\"10\" width=\"56\" height=\"84\" rx=\"28\" fill=\"#fff\"/><g transform=\"translate(50 54) scale(1)\"><ellipse cx=\"-9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/><ellipse cx=\"9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/>\n<circle cx=\"-8\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/><circle cx=\"10\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/>\n<ellipse cx=\"-15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/><ellipse cx=\"15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/>\n<path d=\"M-4 5 q4 4 8 0\" stroke=\"#3A2A55\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\"/></g>", "bunny": "<ellipse cx=\"28\" cy=\"24\" rx=\"9\" ry=\"22\" fill=\"#fff\" stroke=\"#F3D3DE\" stroke-width=\"2\"/><ellipse cx=\"28\" cy=\"26\" rx=\"4\" ry=\"14\" fill=\"#FFC2D4\"/>\n<ellipse cx=\"56\" cy=\"24\" rx=\"9\" ry=\"22\" fill=\"#fff\" stroke=\"#F3D3DE\" stroke-width=\"2\"/><ellipse cx=\"56\" cy=\"26\" rx=\"4\" ry=\"14\" fill=\"#FFC2D4\"/>\n<ellipse cx=\"42\" cy=\"66\" rx=\"34\" ry=\"28\" fill=\"#fff\" stroke=\"#F3D3DE\" stroke-width=\"2\"/><g transform=\"translate(42 66) scale(1)\"><ellipse cx=\"-9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/><ellipse cx=\"9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/>\n<circle cx=\"-8\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/><circle cx=\"10\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/>\n<ellipse cx=\"-15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/><ellipse cx=\"15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/>\n<path d=\"M-4 5 q4 4 8 0\" stroke=\"#3A2A55\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\"/></g><path d=\"M34 42l8 6 8-6-8 -2z\" fill=\"#FF6F9C\"/><circle cx=\"42\" cy=\"45\" r=\"3\" fill=\"#FF6F9C\"/>"};
+
+// Health (replaces Reading in slot 7): a happy apple
+window.ART.Health = "<path d=\"M50 32C40 22 16 24 16 50C16 74 34 88 50 83C66 88 84 74 84 50C84 24 60 22 50 32Z\" fill=\"#fff\"/><ellipse cx=\"32\" cy=\"44\" rx=\"5\" ry=\"8\" fill=\"#E9FBF3\" transform=\"rotate(25 32 44)\"/><path d=\"M50 32q1-11 8-16\" stroke=\"#A0785A\" stroke-width=\"3.5\" fill=\"none\" stroke-linecap=\"round\"/><path d=\"M55 22c6-9 17-9 20-6c-4 8-13 11-20 6z\" fill=\"#7ED6A8\"/><g transform=\"translate(50 58) scale(0.8)\"><ellipse cx=\"-9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/><ellipse cx=\"9\" cy=\"0\" rx=\"3.2\" ry=\"4\" fill=\"#3A2A55\"/><circle cx=\"-8\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/><circle cx=\"10\" cy=\"-1.5\" r=\"1.1\" fill=\"#fff\"/><ellipse cx=\"-15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/><ellipse cx=\"15\" cy=\"6\" rx=\"4\" ry=\"2.4\" fill=\"#FF8FB1\" opacity=\".75\"/><path d=\"M-4 5 q4 4 8 0\" stroke=\"#3A2A55\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\"/></g><path d=\"M82 8v12M76 14h12\" stroke=\"#3DBE8B\" stroke-width=\"4\" stroke-linecap=\"round\"/><path d=\"M14 14l2 4.5 4.5 2-4.5 2-2 4.5-2-4.5-4.5-2 4.5-2z\" fill=\"#FFD27A\"/>";
+
+
+// Discover programs without a cover yet: The Fairy Garden (butterfly), The Glowing Ocean (jellyfish), Crystal Caves (crystal)
+(function () {
+  function face(x, y, s) {
+    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')"><ellipse cx="-9" cy="0" rx="3.2" ry="4" fill="#3A2A55"/><ellipse cx="9" cy="0" rx="3.2" ry="4" fill="#3A2A55"/>' +
+      '<circle cx="-8" cy="-1.5" r="1.1" fill="#fff"/><circle cx="10" cy="-1.5" r="1.1" fill="#fff"/><ellipse cx="-15" cy="6" rx="4" ry="2.4" fill="#FF8FB1" opacity=".75"/>' +
+      '<ellipse cx="15" cy="6" rx="4" ry="2.4" fill="#FF8FB1" opacity=".75"/><path d="M-4 5 q4 4 8 0" stroke="#3A2A55" stroke-width="2" fill="none" stroke-linecap="round"/></g>';
+  }
+  function spark(x, y, r, c) { return '<path d="M' + x + ' ' + (y - r) + 'l' + r * .3 + ' ' + r * .7 + ' ' + r * .7 + ' ' + r * .3 + '-' + r * .7 + ' ' + r * .3 + '-' + r * .3 + ' ' + r * .7 + '-' + r * .3 + '-' + r * .7 + '-' + r * .7 + '-' + r * .3 + ' ' + r * .7 + '-' + r * .3 + 'z" fill="' + c + '"/>'; }
+  window.ART.Butterfly =
+    '<ellipse cx="31" cy="38" rx="21" ry="17" fill="#FFB3C7" transform="rotate(-25 31 38)"/><ellipse cx="69" cy="38" rx="21" ry="17" fill="#FFB3C7" transform="rotate(25 69 38)"/>' +
+    '<ellipse cx="34" cy="66" rx="15" ry="12" fill="#CDBBFF" transform="rotate(25 34 66)"/><ellipse cx="66" cy="66" rx="15" ry="12" fill="#CDBBFF" transform="rotate(-25 66 66)"/>' +
+    '<circle cx="28" cy="36" r="6" fill="#FFE08A"/><circle cx="72" cy="36" r="6" fill="#FFE08A"/><circle cx="33" cy="67" r="4" fill="#fff" opacity=".8"/><circle cx="67" cy="67" r="4" fill="#fff" opacity=".8"/>' +
+    '<rect x="44" y="40" width="12" height="40" rx="6" fill="#9B7EE8"/><path d="M46 24q-6-12-12-14M54 24q6-12 12-14" stroke="#9B7EE8" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
+    '<circle cx="34" cy="10" r="3.2" fill="#FF8FB1"/><circle cx="66" cy="10" r="3.2" fill="#FF8FB1"/><circle cx="50" cy="32" r="13" fill="#B49CF5"/>' + face(50, 32, .55) + spark(86, 80, 6, '#FFD27A');
+  window.ART.Jellyfish =
+    '<path d="M32 60q-4 10 2 18t0 16M44 62q4 10-2 18t2 14M56 62q-4 10 2 18t-2 14M68 60q4 10-2 18t0 16" stroke="#CDBBFF" stroke-width="4" fill="none" stroke-linecap="round"/>' +
+    '<path d="M38 62q2 8-2 14M62 62q-2 8 2 14" stroke="#A9DCFF" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+    '<path d="M20 56q0-40 30-40t30 40q-7 6-15 1q-7 6-15 0q-8 6-15 0q-8 5-15-1z" fill="#FFB3D9"/><path d="M28 40q4-16 20-18" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".7"/>' +
+    '<circle cx="34" cy="50" r="2.4" fill="#fff" opacity=".8"/><circle cx="68" cy="46" r="2" fill="#fff" opacity=".8"/>' + face(50, 42, .7) +
+    spark(14, 22, 6, '#FFD27A') + spark(88, 76, 5, '#A9DCFF') + '<circle cx="84" cy="22" r="2.5" fill="#A9DCFF"/><circle cx="16" cy="80" r="2" fill="#CDBBFF"/>';
+  window.ART.Farm =      // a happy cow for Domestic Animals
+    '<path d="M14 88h72" stroke="#BFE6A8" stroke-width="8" stroke-linecap="round"/>' +
+    '<ellipse cx="24" cy="38" rx="11" ry="6" fill="#F7E3D0" transform="rotate(-25 24 38)"/><ellipse cx="76" cy="38" rx="11" ry="6" fill="#F7E3D0" transform="rotate(25 76 38)"/>' +
+    '<path d="M34 26q-4-10 2-14M66 26q4-10-2-14" stroke="#E8C39A" stroke-width="5" fill="none" stroke-linecap="round"/>' +
+    '<ellipse cx="50" cy="48" rx="25" ry="27" fill="#fff" stroke="#E9DCF2" stroke-width="2"/><path d="M30 34q8-10 18-4q-6 10-18 4z" fill="#5B4A6E" opacity=".85"/><circle cx="66" cy="56" r="6" fill="#5B4A6E" opacity=".85"/>' +
+    '<ellipse cx="50" cy="66" rx="17" ry="11" fill="#FFC4D6"/><ellipse cx="44" cy="66" rx="2.6" ry="3.4" fill="#E0567F"/><ellipse cx="56" cy="66" rx="2.6" ry="3.4" fill="#E0567F"/>' +
+    face(50, 46, .6) + spark(86, 16, 6, '#FFD27A') + spark(14, 18, 4.5, '#FFD27A');
+  window.ART.Space =      // Outer Space: a smiling planet with a ring, a little moon and stars
+    '<circle cx="80" cy="76" r="8" fill="#FFF3C4"/><circle cx="77" cy="74" r="1.6" fill="#F2DE9A"/><circle cx="83" cy="79" r="1.2" fill="#F2DE9A"/>' +
+    '<path d="M14 58q36-24 72-6" stroke="#FFD27A" stroke-width="5" fill="none" stroke-linecap="round" opacity=".55"/>' +
+    '<circle cx="50" cy="50" r="24" fill="#B49CF5"/><path d="M30 42q20-6 40 2M28 56q22 6 44-2" stroke="#CDBBFF" stroke-width="4" fill="none" stroke-linecap="round"/>' +
+    '<path d="M14 58q36 20 72-6" stroke="#FFC94D" stroke-width="5" fill="none" stroke-linecap="round"/>' +
+    face(50, 48, .6) + spark(18, 20, 7, '#FFD27A') + spark(84, 18, 5, '#FFB3D9') + spark(20, 84, 4.5, '#A9DCFF') +
+    '<circle cx="66" cy="14" r="2" fill="#FFD27A"/><circle cx="34" cy="10" r="1.6" fill="#A9DCFF"/><circle cx="88" cy="44" r="1.8" fill="#FFB3D9"/>';
+  window.ART.Rainbow = (function () {      // Rainbows Explained: a pastel rainbow between two clouds, one of them smiling
+    var cols = ['#FF8FB1', '#FFB86B', '#FFE066', '#7FD6A3', '#6FC2F0', '#B48CFF'], s = '';
+    for (var i = 0; i < cols.length; i++) { var r = 40 - i * 5.2; s += '<path d="M' + (50 - r) + ' 70A' + r + ' ' + r + ' 0 0 1 ' + (50 + r) + ' 70" stroke="' + cols[i] + '" stroke-width="5.6" fill="none"/>'; }
+    var cloud = function (x, y, k) { return '<circle cx="' + (x - 9 * k) + '" cy="' + (y + 2 * k) + '" r="' + 8 * k + '" fill="#fff"/><circle cx="' + x + '" cy="' + (y - 4 * k) + '" r="' + 11 * k + '" fill="#fff"/><circle cx="' + (x + 10 * k) + '" cy="' + (y + 2 * k) + '" r="' + 8 * k + '" fill="#fff"/><rect x="' + (x - 17 * k) + '" y="' + (y + 1 * k) + '" width="' + 34 * k + '" height="' + 9 * k + '" rx="' + 4.5 * k + '" fill="#fff"/>'; };
+    return s + cloud(17, 72, 1) + cloud(83, 72, 1.05) + face(83, 71, .42) + spark(86, 18, 7, '#FFD27A') + spark(14, 26, 5, '#FFD27A') + spark(50, 14, 4, '#FFFFFF');
+  })();
+  window.ART.Egypt = (function () {      // Ancient Egypt: Tutankhamun's mask – the striped headcloth frames the smiling face
+    var gold = '#FFC94D', blue = '#5B8CF0', N = 'M50 28C35 28 26 34 26 45L18 81Q50 89 82 81L74 45C74 34 65 28 50 28Z', s = '';
+    s += '<defs><clipPath id="egNemes"><path d="' + N + '"/></clipPath></defs><path d="' + N + '" fill="' + gold + '"/><g clip-path="url(#egNemes)">';
+    for (var y = 30; y < 90; y += 7.2) s += '<rect x="10" y="' + y + '" width="80" height="3.4" fill="' + blue + '"/>';
+    s += '</g>';
+    s += '<path d="M21 82Q50 95 79 82L81 90Q50 103 19 90Z" fill="' + blue + '"/><path d="M22 85.5Q50 98 78 85.5" stroke="' + gold + '" stroke-width="2.4" fill="none"/>';      // the collar
+    s += '<ellipse cx="50" cy="56" rx="14.5" ry="16.5" fill="#FFE3A3"/>';      // the face, inside the headcloth
+    s += '<path d="M34.5 43Q50 36.5 65.5 43L65.5 47Q50 40.5 34.5 47Z" fill="' + gold + '"/><path d="M35 45Q50 38.8 65 45" stroke="' + blue + '" stroke-width="1.3" fill="none"/>';      // the brow band
+    s += '<path d="M50 35.5v5" stroke="' + blue + '" stroke-width="2.6" stroke-linecap="round"/><circle cx="50" cy="35" r="2.8" fill="' + blue + '"/>';      // the cobra
+    s += face(50, 57, .5) + '<path d="M39.6 54.5h-3.6M60.4 54.5h3.6" stroke="#3A2A55" stroke-width="1.5" stroke-linecap="round"/>';
+    s += '<path d="M46.6 71.5h6.8l-1 11h-4.8z" fill="' + blue + '"/><path d="M47.2 75.5h5.6M47.6 79.5h4.8" stroke="' + gold + '" stroke-width="1.4"/>';      // the beard
+    return s + spark(88, 16, 7, '#FFD27A') + spark(12, 22, 5, '#FFD27A');
+  })();
+  window.ART.Crystal =
+    '<ellipse cx="50" cy="86" rx="36" ry="7" fill="#E8DCCB"/>' +
+    '<path d="M20 86l-2-28 9-12 9 12-2 28z" fill="#A9DCFF"/><path d="M27 46l9 12-2 28h-7z" fill="#D5EEFF"/>' +
+    '<path d="M66 86l-1-24 9-11 9 11-2 24z" fill="#FFB3D9"/><path d="M74 51l9 11-2 24h-7z" fill="#FFD6EA"/>' +
+    '<path d="M36 86l-3-46 17-26 17 26-3 46z" fill="#CDBBFF"/><path d="M50 14l17 26-3 46H50z" fill="#E4DAFF"/><path d="M33 40h34" stroke="#fff" stroke-width="2" opacity=".6"/>' +
+    face(50, 58, .6) + spark(86, 20, 7, '#FFD27A') + spark(14, 26, 5, '#FFD27A');
+})();</script>
+
+<script>
+/* Kids Player Family Library - the family's own private site, in the player's look (children with a grown-up).
+ *   Home       the latest news, and three big buttons: Library, Downloads, Shop
+ *   Library    new topics to download on top; then the doors, their groups and topics. A topic: what it is about,
+ *              what is inside, and Download (topics with a pack) or Ask for this topic
+ *   Downloads  worksheets: a cover, what it is, Download
+ *   Shop       pretend, nothing is bought: Refills (pick which, how many sheets, Submit) and New printable books
+ *              (Join the wishlist). Each one sends Sara an email.
+ * The data comes from data.js (Make_Site_Data.ps1). Online it runs in Sara's Google web app (API below). */
+(function () {
+  'use strict';
+  var S = {};      // the site's data: data.js on this computer; online it comes from Sara's Google web app after the family code
+  function useData(d) { S = d || {}; ['cats', 'news', 'printables', 'kids', 'refills', 'books'].forEach(function (k) { S[k] = S[k] || []; }); }
+  useData(window.SITE);
+  var IN_APP = /KidsPlayerApp/.test(navigator.userAgent);      // opened from the Home button of the player (V1.4)
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function art(name) { return window.ART && ART[name] ? '<svg viewBox="0 0 100 100">' + ART[name] + '</svg>' : ''; }
+  function bunny(cls) { return window.ART && ART.bunny ? '<svg class="' + (cls || '') + '" viewBox="0 0 84 96">' + ART.bunny + '</svg>' : ''; }
+  function day(d) { if (!d) return ''; var x = new Date(String(d).slice(0, 10) + 'T12:00'); return isNaN(x) ? d : x.getDate() + ' ' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][x.getMonth()]; }
+  function fresh(d) { return d && (Date.now() - new Date(String(d).slice(0, 10) + 'T12:00')) < 30 * 864e5; }
+  function store(k, v) { try { if (v === undefined) return JSON.parse(localStorage.getItem('kpfam_' + k)); localStorage.setItem('kpfam_' + k, JSON.stringify(v)); } catch (e) { return null; } }
+  function hello(title, text) { return '<div class="hello">' + bunny('bun') + '<div class="bubble"><h1>' + title + '</h1>' + (text ? '<p>' + text + '</p>' : '') + '</div></div>'; }
+  function sheet(html) {
+    var d = document.createElement('div'); d.className = 'shade'; d.innerHTML = '<div class="sheet">' + html + '</div>'; document.body.appendChild(d);
+    var shut = function () { d.remove(); }; d.onclick = function (e) { if (e.target === d) shut(); };
+    var x = d.querySelector('.x'); if (x) x.onclick = shut; return d;
+  }
+
+  // ---------------------------------------------------------------- Sara's Google web app (or the preview on this computer)
+  // Online the page asks Sara's script directly, with no Google sign-in: Google's own pages fail in a browser with two Google accounts
+  var API_URL = window.KP_API || '', ONLINE = !!API_URL;
+  function ask(fn, args, cb) {      // cb(answer), or cb(undefined) when the internet or Google can't be reached
+    fetch(API_URL, { method: 'POST', credentials: 'omit', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ fn: fn, args: args }) })
+      .then(function (r) { return r.json(); }).then(function (j) { cb(j.r); }).catch(function () { cb(undefined); });
+  }
+  if (!ONLINE && /[?&]app=1/.test(location.search)) IN_APP = true;      // the demo shows this page as the player will
+  var API = {
+    check: function (code, cb) { if (ONLINE) ask('checkCode', [code], function (k) { cb(k || ''); }); else cb(code === '2026' ? 'preview' : ''); },      // the right code gives this device its key
+    send: function (r, cb) {      // r: { type: 'refill' | 'book' | 'topic', who, ... } -> an email to Sara and a line in the Requests sheet
+      if (ONLINE) ask('sendRequest', [store('code'), r], function (ok) { cb(!!ok); });
+      else { var l = store('requests') || []; r.status = 'sent'; r.at = new Date().toISOString(); l.unshift(r); store('requests', l); setTimeout(function () { cb(true); }, 500); }
+    },
+    list: function (cb) { if (ONLINE) ask('myRequests', [store('code')], function (l) { cb(l || []); }); else cb(store('requests') || []); },
+    data: function (cb) { if (ONLINE) ask('siteData', [store('code')], cb); else cb(window.SITE); },      // null: the code was changed; undefined: no internet
+    // a file to download: 'Kids Player Library/4 Create/Robbie_the_Robot_v1.zip' or 'Printables/Elf Rainbow Star Chart.pdf'
+    link: function (file, cb) { if (ONLINE) ask('fileLink', [store('code'), file], function (u) { cb(u || ''); }); else cb(encodeURI(/^Kids Player Library\//.test(file) ? '../' + file : file)); }
+  };
+  // on the player: the topic goes straight into the app (this page closes and the app shows its progress; big topics ask for Mama's PIN there)
+  function getOnPlayer(id) {
+    var app = window.KidsPlayerApp || (!ONLINE && window.parent !== window && window.parent.KidsPlayerApp);      // (the demo: the page around this one)
+    if (app && app.getTopic) { app.getTopic(id); return; }
+    var a = document.createElement('a'); a.href = 'kidsplayer://get/' + id; a.target = '_top'; document.body.appendChild(a); a.click(); a.remove();
+  }
+  function download(file, btn) {
+    if (IN_APP) {      // a worksheet: nothing to save on the player
+      sheet('<div class="sh"><h3>⬇ Download</h3><span class="x press">✕</span></div><p class="about">Worksheets are for printing: open <b>kidsplayer.org</b> on a computer or a phone with a printer.</p>'); return;
+    }
+    var was = btn.innerHTML; btn.innerHTML = '⏳ One moment…';
+    API.link(file, function (url) {
+      btn.innerHTML = was;
+      if (url) {      // a real link to tap: pop-ups and alerts are blocked inside Google's page, without a word
+        sheet('<div class="sh"><h3>⬇ Ready</h3><span class="x press">✕</span></div><p class="about">' + esc(file.split('/').pop()) + '</p><a class="btn press" href="' + esc(url) + '" target="_blank" rel="noopener">⬇ Download now</a>');
+        return;
+      }
+      API.data(function (d) {      // no link: the family code was changed, or the file is not in Drive
+        if (d === null) { store('in', false); gate(); return; }
+        sheet('<div class="sh"><h3>Not there yet</h3><span class="x press">✕</span></div><p class="about">Sorry, this file is not in the library yet. Please try again later.</p>');
+      });
+    });
+  }
+
+  // ---------------------------------------------------------------- the family code (once on each phone or tablet)
+  function gate() {
+    if (store('in') || !ONLINE) return start();      // the preview on this computer needs no code (the real one is checked by Google)
+    var g = document.createElement('div'); g.className = 'gate'; var typed = '';
+    g.innerHTML = bunny('bun') + '<h1>Hello! 💖</h1><p>Type our family code</p><div class="dots" id="dots"><i></i><i></i><i></i><i></i></div><div class="pad">' +
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0, '⌫'].map(function (k) { return k === '' ? '<span></span>' : '<span class="key press" data-k="' + k + '">' + k + '</span>'; }).join('') + '</div>';
+    document.body.appendChild(g);
+    function dots() { [].forEach.call(g.querySelectorAll('.dots i'), function (d, i) { d.classList.toggle('on', i < typed.length); }); }
+    g.querySelectorAll('.key').forEach(function (k) {
+      k.onclick = function () {
+        var v = k.getAttribute('data-k'); if (v === '⌫') typed = typed.slice(0, -1); else if (typed.length < 4) typed += v; dots();
+        if (typed.length === 4) API.check(typed, function (devKey) {
+          if (devKey) { store('in', true); store('code', devKey); g.remove(); start(); }
+          else { var d = $('dots'); d.classList.remove('shake'); void d.offsetWidth; d.classList.add('shake'); typed = ''; setTimeout(dots, 300); }
+        });
+      };
+    });
+  }
+
+  // ---------------------------------------------------------------- pages
+  var page = 'home';
+  var TABS = [['home', '🏠', 'Home'], ['library', '📚', 'Library'], ['downloads', '🖨️', 'Downloads'], ['shop', '🛍️', 'Shop']];
+  function nav() {
+    $('nav').innerHTML = TABS.map(function (t) { return '<div class="nb press' + (t[0] === page || (page === 'cat' && t[0] === 'library') ? ' on' : '') + '" data-p="' + t[0] + '"><span class="ic">' + t[1] + '</span>' + t[2] + '</div>'; }).join('');
+    $('nav').querySelectorAll('.nb').forEach(function (b) { b.onclick = function () { go(b.getAttribute('data-p')); }; });
+  }
+  function go(p, arg) { page = p; nav(); window.scrollTo(0, 0); [].forEach.call(document.querySelectorAll('.shade'), function (s) { s.remove(); }); ({ home: home, library: library, cat: category, downloads: downloads, shop: shop, refills: refills, books: books })[p](arg); }
+  function kindBadge(n) { return n.season ? '<span class="badge xmas">🎄 Christmas</span>' : n.version > 1 ? '<span class="badge up">Updated · v' + n.version + '</span>' : '<span class="badge">New</span>'; }
+
+  // Home: the latest news, then Library · Downloads · Shop
+  function home() {
+    var h = hello('Hi there! 💖', 'Here is what is new in the Kids Player');
+    var xm = S.news.filter(function (n) { return n.season; })[0];
+    if (xm) h += '<div class="card xbanner"><span class="ic">🎄</span><div><b>Christmas is coming!</b><p>From ' + day(xm.from) + ' to ' + day(xm.until) + ': the Christmas Kitchen, snow and music, and the elf hides a rainbow star every day!</p></div></div>';
+    h += '<div class="sect"><h2>📣 Latest news</h2></div><div class="list">';
+    var items = S.news.slice(0, 4).map(function (n, i) { return '<div class="card row press" data-n="' + i + '">' + (n.cover ? '<img src="' + n.cover + '" alt="">' : '<span class="ph">✨</span>') + '<div>' + kindBadge(n) + '<b>' + esc(n.title) + '</b><small>' + esc(n.place) + ' · ' + day(n.added) + '</small><p>' + esc(n.about) + '</p></div></div>'; });
+    if (S.app) items.push('<div class="card row"><span class="ph" style="background:#E6F3FF">🐰</span><div><span class="badge app">App ' + esc(S.app.name) + '</span><b>The player app</b><small>' + day(S.app.added) + '</small><p>' + esc(S.app.whats_new) + ' It updates by itself on Wi-Fi.</p></div></div>');
+    h += items.join('') + '</div>';
+    h += '<div class="big3">' +
+      '<div class="bigb press" data-go="library" style="background:#A9DCFF;box-shadow:0 6px 0 #3E9BE0;color:#2B7FC4"><span class="ic">📚</span>Library<small>all the topics</small></div>' +
+      '<div class="bigb press" data-go="downloads" style="background:#A8E6C9;box-shadow:0 6px 0 #3DBE8B;color:#2E9A6F"><span class="ic">🖨️</span>Downloads<small>worksheets</small></div>' +
+      '<div class="bigb press" data-go="shop" style="background:#FFB3C7;box-shadow:0 6px 0 #FF6F9C;color:#E0507E"><span class="ic">🛍️</span>Shop<small>refills &amp; books</small></div></div>';
+    $('app').innerHTML = h;
+    $('app').querySelectorAll('[data-go]').forEach(function (b) { b.onclick = function () { go(b.getAttribute('data-go')); }; });
+    $('app').querySelectorAll('[data-n]').forEach(function (b) { b.onclick = function () { showNews(S.news[+b.getAttribute('data-n')]); }; });
+  }
+
+  // Library: new topics to download first, then the doors
+  function library() {
+    var h = hello('The library 📚', 'New topics to download, and everything on the player');
+    var dl = S.news.filter(function (n) { return n.file; });
+    if (dl.length) {
+      h += '<div class="sect"><h2>✨ New to download</h2></div><div class="list">' + dl.map(function (n, i) {
+        return '<div class="card row press" data-n="' + S.news.indexOf(n) + '">' + (n.cover ? '<img src="' + n.cover + '" alt="">' : '<span class="ph">✨</span>') + '<div>' + kindBadge(n) + '<b>' + esc(n.title) + '</b><small>' + esc(n.place) + ' · ' + day(n.added) + '</small></div></div>';
+      }).join('') + '</div>';
+    }
+    h += '<div class="sect"><h2>📚 All the topics</h2><small>tap a door</small></div><div class="tiles">';
+    S.cats.forEach(function (c) {
+      var isNew = c.groups.some(function (g) { return (g.pack && fresh(g.pack.added)) || (g.newest && fresh(g.newest.added)); });
+      h += '<div class="tile press" data-c="' + c.num + '" style="background:' + c.bg + ';box-shadow:0 6px 0 ' + c.dk + ';color:' + c.dk + '">' + art(c.art) + c.name + (isNew ? '<span class="badge">New</span>' : '') + '</div>';
+    });
+    $('app').innerHTML = h + '</div>';
+    $('app').querySelectorAll('.tile').forEach(function (t) { t.onclick = function () { go('cat', +t.getAttribute('data-c')); }; });
+    $('app').querySelectorAll('[data-n]').forEach(function (b) { b.onclick = function () { showNews(S.news[+b.getAttribute('data-n')]); }; });
+  }
+  function groupBadge(g) {
+    if (g.pack && g.pack.season) return '<span class="badge xmas">🎄 until ' + day(g.pack.until) + '</span>';
+    var p = g.pack || g.newest; if (p && fresh(p.added)) return '<span class="badge' + (p.version > 1 ? ' up' : '') + '">' + (p.version > 1 ? 'Updated' : 'New') + '</span>';
+    return '';
+  }
+  function category(num) {
+    var c = S.cats.filter(function (x) { return x.num === num; })[0]; if (!c) return library();
+    var total = c.groups.reduce(function (a, g) { return a + g.count; }, 0);
+    var h = '<div class="ctop" style="background:' + c.dk + '"><span class="back press" id="back">◀</span><div class="hd">' + art(c.art) + '<div><h2>' + c.name + '</h2><p>' + c.groups.length + ' groups · ' + total + ' things</p></div></div></div><div class="groups">';
+    c.groups.forEach(function (g, i) {
+      h += '<div class="card gcard press" data-g="' + i + '">' + groupBadge(g) + (g.cover ? '<img class="cv" src="' + g.cover + '" alt="">' : '<div class="ph" style="background:' + c.bg + '">' + art(c.art) + '</div>') +
+        '<div class="txt"><b>' + esc(g.name) + '</b><small>' + (g.topics.length ? g.topics.length + (g.topics.length === 1 ? ' topic' : ' topics') : (g.kinds || g.count + ' things')) + '</small></div></div>';
+    });
+    $('app').innerHTML = h + '</div>';
+    $('back').onclick = function () { go('library'); };
+    $('app').querySelectorAll('.gcard').forEach(function (el) {
+      el.onclick = function () { var g = c.groups[+el.getAttribute('data-g')]; if (g.topics.length) groupSheet(c, g); else topicSheet(c, g, null); };
+    });
+  }
+  function groupSheet(c, g) {
+    var d = sheet('<div class="sh"><h3>' + esc(g.name) + '</h3><span class="x press">✕</span></div><div class="list">' + g.topics.map(function (t, i) {
+      return '<div class="card row press" data-t="' + i + '">' + (t.cover ? '<img src="' + t.cover + '" alt="">' : '<span class="ph" style="background:' + c.bg + '">' + art(c.art) + '</span>') + '<div>' + groupBadge(t) + '<b>' + esc(t.name) + '</b><small>' + esc(t.kinds || '') + '</small></div></div>';
+    }).join('') + '</div>');
+    d.querySelectorAll('[data-t]').forEach(function (el) { el.onclick = function () { d.remove(); topicSheet(c, g.topics[+el.getAttribute('data-t')], g); }; });
+  }
+  // a topic: what it is about, what is inside, Download (or Ask for this topic)
+  function topicSheet(c, t, g) {
+    var p = t.pack, about = t.about || ('A ' + c.name.toLowerCase() + ' topic on the Kids Player' + (t.kinds ? ' with ' + t.kinds.replace(/ · /g, ', ') : '') + '.');
+    var h = '<div class="topic"><div class="sh"><span style="flex:1"></span><span class="x press">✕</span></div>' + (t.cover ? '<img class="pic" src="' + t.cover + '" alt="">' : '') +
+      '<div class="where">' + (t.where ? esc(t.where) : c.name + (g ? ' › ' + esc(g.name) : '')) + '</div><h3>' + esc(t.name) + '</h3>' + groupBadge(t) +
+      '<div class="kinds">' + (t.kinds ? t.kinds.split(' · ').map(function (k) { return '<span>' + esc(k) + '</span>'; }).join('') : '') + '</div><p class="about">' + esc(about) + '</p>';
+    var inPack = p && p.title && p.title !== t.name ? '<p class="note">It comes in the topic “' + esc(p.title) + '”.</p>' : '';
+    if (p && p.file && IN_APP && p.id) h += '<span class="btn press" id="dlp">⬇ Get it on my player' + (p.size_mb ? ' · ' + p.size_mb + ' MB' : '') + '</span>' + inPack + (p.size_mb >= 100 ? '<p class="note">🔒 This is a big one, so a grown-up needs to say yes.</p>' : '');
+    else if (p && p.file) h += '<span class="btn press" id="dlt">⬇ Download' + (p.size_mb ? ' · ' + p.size_mb + ' MB' : '') + '</span>' + inPack + '<p class="note">This saves the topic’s file. To put it on a player, open our website from the player’s Home screen.</p>';
+    else h += '<span class="btn alt press" id="askt">📨 Ask for this topic</span><p class="note">It is not ready to download yet – we will put it on your player.</p>';
+    var d = sheet(h + '</div>');
+    var dl = d.querySelector('#dlt'); if (dl) dl.onclick = function () { download(p.file, dl); };
+    var dp = d.querySelector('#dlp'); if (dp) dp.onclick = function () { getOnPlayer(p.id); };
+    var a = d.querySelector('#askt'); if (a) a.onclick = function () { askWho(function (who) { API.send({ type: 'topic', who: who, item: c.name + ' › ' + (g ? g.name + ' › ' : '') + t.name }, function (ok) { if (ok) { a.className = 'btn off'; a.textContent = '✓ Asked – thank you!'; } }); }); };
+  }
+  function showNews(n) {
+    var c = S.cats.filter(function (x) { return x.num === n.door; })[0] || { name: (n.place || '').split(' › ')[0] };
+    topicSheet(c, { name: n.title, where: n.place, about: n.about, cover: n.cover, kinds: '', pack: { id: n.id, file: n.file, size_mb: n.size_mb, version: n.version, added: n.added, season: n.season, until: n.until } }, { name: (n.place || '').split(' › ').slice(1).join(' › ') || '' });
+  }
+
+  // Downloads: worksheets
+  function downloads() {
+    var h = hello('Downloads 🖨️', 'Worksheets to print and colour – ask a grown-up to print') + '<div style="display:grid;gap:14px">';
+    S.printables.forEach(function (p) {
+      h += '<div class="card dl">' + (p.cover ? '<img src="' + p.cover + '" alt="">' : '') + '<div class="txt">' + (fresh(p.added) ? '<div><span class="badge">New</span></div>' : '') + '<b>' + esc(p.title) + '</b><p>' + esc(p.about) + '</p><small>PDF · ' + p.size_kb + ' KB · ' + day(p.added) + '</small>' +
+        '<div class="btns"><span class="btn press" data-f="' + esc(p.file) + '">⬇ Download</span></div></div></div>';
+    });
+    if (!S.printables.length) h += '<div class="empty">No worksheets yet – they are coming!</div>';
+    $('app').innerHTML = h + '</div>';
+    $('app').querySelectorAll('[data-f]').forEach(function (b) { b.onclick = function () { download(b.getAttribute('data-f'), b); }; });
+  }
+
+  // Shop (pretend - nothing is bought): Refills and New printable books
+  function shop() {
+    var h = hello('The shop 🛍️', 'Pick what you would like – it is all free!') +
+      '<div class="shop2"><div class="card sitem press" data-go="refills"><span class="ic">📦</span><b>Refills</b><p>Note sheets, drawing sheets, Discover sheets, stickers …</p></div>' +
+      '<div class="card sitem press" data-go="books"><span class="ic">📚</span><b>New printable books</b><p>Join the wishlist for the new books</p></div></div>' +
+      '<div class="sect"><h2>💌 What you asked for</h2></div><div id="mine"></div>';
+    $('app').innerHTML = h;
+    $('app').querySelectorAll('[data-go]').forEach(function (b) { b.onclick = function () { go(b.getAttribute('data-go')); }; });
+    mine();
+  }
+  function whoRow(id) { var w = store('who'); return '<div class="sect" style="margin-top:6px"><h2 style="font-size:16px">Who is asking?</h2></div><div class="who" id="' + id + '">' + S.kids.map(function (k) { return '<span class="press' + (k === w ? ' on' : '') + '" data-who="' + esc(k) + '">' + bunny('') + esc(k) + '</span>'; }).join('') + '</div>'; }
+  function bindWho(id) { var box = $(id); if (!box) return; box.querySelectorAll('[data-who]').forEach(function (b) { b.onclick = function () { store('who', b.getAttribute('data-who')); box.querySelectorAll('span').forEach(function (x) { x.classList.toggle('on', x === b); }); }; }); }
+  function askWho(then) {      // a quick "who is asking?" when there is no one chosen yet
+    var w = store('who'); if (w) return then(w);
+    var d = sheet('<div class="sh"><h3>Who is asking?</h3><span class="x press">✕</span></div><div class="who">' + S.kids.map(function (k) { return '<span class="press" data-who="' + esc(k) + '">' + bunny('') + esc(k) + '</span>'; }).join('') + '</div>');
+    d.querySelectorAll('[data-who]').forEach(function (b) { b.onclick = function () { store('who', b.getAttribute('data-who')); d.remove(); then(b.getAttribute('data-who')); }; });
+  }
+  function refills() {
+    var pick = {};
+    var h = '<div class="ctop" style="background:#FF8FB1"><span class="back press" id="back">◀</span><div class="hd"><span style="font-size:48px">📦</span><div><h2>Refills</h2><p>Pick the refills you need</p></div></div></div>' + whoRow('who1') +
+      '<div class="sect"><h2 style="font-size:16px">Which refills?</h2></div><div class="refills">' + S.refills.map(function (r) {
+        return '<div class="card ref press" data-r="' + esc(r.id) + '"><span class="tick">✓</span><span class="ic">' + (r.icon || '📄') + '</span><b>' + esc(r.name) + '</b><small>' + esc(r.about || '') + '</small><span class="n">' + r.sheets + ' sheets</span></div>';
+      }).join('') + '<div class="card ref press" data-r="all"><span class="tick">✓</span><span class="ic">🎁</span><b>All of them</b><small>everything above</small><span class="n" id="alln"></span></div></div>' +
+      '<div class="total" id="total">Pick one or more</div><textarea id="note" placeholder="Anything else? (a grown-up can write here)"></textarea>' +
+      '<div class="btns" style="margin-top:12px"><span class="btn green press" id="go">📨 Submit</span></div>';
+    $('app').innerHTML = h; bindWho('who1');
+    var all = S.refills.reduce(function (a, r) { return a + (+r.sheets || 0); }, 0); $('alln').textContent = all + ' sheets';
+    $('back').onclick = function () { go('shop'); };
+    function draw() {
+      var ids = Object.keys(pick).filter(function (k) { return pick[k]; }), n = S.refills.filter(function (r) { return pick[r.id]; }).reduce(function (a, r) { return a + (+r.sheets || 0); }, 0);
+      $('app').querySelectorAll('.ref').forEach(function (el) { var id = el.getAttribute('data-r'); el.classList.toggle('on', id === 'all' ? S.refills.every(function (r) { return pick[r.id]; }) : !!pick[id]); });
+      $('total').innerHTML = ids.length ? 'You will get <b>' + n + ' sheets</b> ✨' : 'Pick one or more';
+    }
+    $('app').querySelectorAll('.ref').forEach(function (el) {
+      el.onclick = function () { var id = el.getAttribute('data-r'); if (id === 'all') { var on = !S.refills.every(function (r) { return pick[r.id]; }); S.refills.forEach(function (r) { pick[r.id] = on; }); } else pick[id] = !pick[id]; draw(); };
+    });
+    $('go').onclick = function () {
+      var who = store('who'), items = S.refills.filter(function (r) { return pick[r.id]; });
+      if (!who) { $('who1').classList.remove('shake'); void $('who1').offsetWidth; $('who1').classList.add('shake'); return; }
+      if (!items.length) { $('total').classList.remove('shake'); void $('total').offsetWidth; $('total').classList.add('shake'); return; }
+      var n = items.reduce(function (a, r) { return a + (+r.sheets || 0); }, 0); $('go').textContent = 'Sending…';
+      API.send({ type: 'refill', who: who, item: items.map(function (r) { return r.name + ' (' + r.sheets + ')'; }).join(', '), sheets: n, note: $('note').value.trim() }, function (ok) {
+        if (!ok) { $('go').textContent = 'Try again 📨'; return; }
+        $('app').innerHTML = '<div class="card done"><span class="ic">📦</span><h2>Your refills are on their way!</h2><p>' + n + ' sheets for ' + esc(who) + ' ✨</p><div class="btns" style="max-width:220px;margin:14px auto 0"><span class="btn press" id="ok">Back to the shop</span></div></div>';
+        $('ok').onclick = function () { go('shop'); };
+      });
+    };
+  }
+  function books() {
+    var wl = store('wishlist') || {};
+    var h = '<div class="ctop" style="background:#B48CFF"><span class="back press" id="back">◀</span><div class="hd"><span style="font-size:48px">📚</span><div><h2>New printable books</h2><p>Join the wishlist and we will make one for you</p></div></div></div>' + whoRow('who2') + '<div class="books" style="margin-top:14px">';
+    S.books.forEach(function (b, i) {
+      h += '<div class="card bk">' + (b.cover ? '<img src="' + b.cover + '" alt="">' : '') + '<div class="txt">' + (fresh(b.added) ? '<span class="badge">New</span>' : '') + '<b>' + esc(b.title) + '</b><p>' + esc(b.about) + '</p>' +
+        '<div class="btns"><span class="btn press' + (wl[b.title] ? ' off' : '') + '" data-b="' + i + '">' + (wl[b.title] ? '✓ On the wishlist' : '💖 Join the wishlist') + '</span></div></div></div>';
+    });
+    if (!S.books.length) h += '<div class="empty">New books are coming soon!</div>';
+    $('app').innerHTML = h + '</div>'; bindWho('who2');
+    $('back').onclick = function () { go('shop'); };
+    $('app').querySelectorAll('[data-b]').forEach(function (btn) {
+      btn.onclick = function () {
+        var b = S.books[+btn.getAttribute('data-b')]; if (wl[b.title]) return;
+        askWho(function (who) {
+          btn.textContent = 'Sending…';
+          API.send({ type: 'book', who: who, item: b.title }, function (ok) {
+            if (!ok) { btn.textContent = 'Try again 💖'; return; }
+            wl[b.title] = true; store('wishlist', wl); btn.className = 'btn off'; btn.textContent = '✓ On the wishlist';
+          });
+        });
+      };
+    });
+  }
+  function mine() {
+    API.list(function (l) {
+      var el = $('mine'); if (!el) return;
+      var IC = { refill: '📦', book: '📚', topic: '📨' }, NAME = { refill: 'Refills', book: 'Wishlist', topic: 'Topic' };
+      el.innerHTML = (l || []).length ? '<div style="display:grid;gap:10px">' + l.slice(0, 12).map(function (r) {
+        return '<div class="card mine"><span class="ic">' + (IC[r.type] || '💌') + '</span><div><b>' + NAME[r.type] + ': ' + esc(r.item) + '</b><small>' + esc(r.who) + ' · ' + day(r.at) + (r.sheets ? ' · ' + r.sheets + ' sheets' : '') + '</small></div>' +
+          '<span class="st' + (r.status === 'done' ? ' ok' : '') + '">' + (r.status === 'done' ? 'Done ✓' : 'Sent') + '</span></div>';
+      }).join('') + '</div>' : '<div class="empty">Nothing yet</div>';
+    });
+  }
+
+  function start() {
+    if (!ONLINE) { var d = document.createElement('div'); d.className = 'demo'; d.textContent = 'Preview'; document.body.appendChild(d); }
+    $('app').innerHTML = hello('One moment… 💖', 'Opening our library');
+    API.data(function (data) {
+      if (data === undefined) { $('app').innerHTML = hello('Oh no!', 'I can’t reach our library. Check the internet, then open this page again.'); return; }
+      if (!data) { store('in', false); gate(); return; }      // the family code was changed: type the new one
+      useData(typeof data === 'string' ? JSON.parse(data) : data); go('home');
+    });
+  }
+  gate();
+})();
+</script>
+</body></html>
